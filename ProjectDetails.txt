@@ -1,0 +1,57 @@
+                    Details about the project
+
+
+This is graphics based project which can be used to provide security in a region.
+
+
+Functionality--
+
+1)Attacks are generated on certain plots of land, to which soldiers are dispatched from the nearest campsite.​
+
+2)Only certain paths can be taken by the soldiers throughout the plot of land, i.e., land and bridge only.​
+
+3)Camps become empty after it has serviced an attack.​
+
+4)Multiple attacks can occur in a short span of time.​
+
+​
+Region types---
+​
+Empty Space: Soldiers can walk through it and attacks can occur here.​
+
+Mountain: Soldiers cannot walk over it.​
+
+River: Soldiers cannot cross through.​
+
+Campsite: Soldiers are ready for dispatch.
+
+Bridge: Soldiers can cross through​
+
+Target: Location of attack by enemy troops​
+
+Path: The shortest route taken by soldiers from the nearest campsite​
+
+Empty Campsite: No soldiers are present in camp​
+
+​Working algorithm--
+
+Breadth First Search (BFS)​--
+
+It is a graph traversal algorithm that starts traversing the graph from the root node and explores all the neighboring nodes. Then, it selects the nearest node and explores all the unexplored nodes. While using BFS for traversal, any node in the graph can be considered as the root node.​
+
+Used function--
+
+1) shortest-- 	It finds the nearest soldier location (Using BFS).
+2) path--     	It  finds the path between soldier location and target.
+
+Technogogy used----
+1) c++ with oops.
+2) Opengl.
+3) MYSQL.
+
+
+Future scope--
+ 
+1) Better Graphics.
+2) More option.
+3)Random map.

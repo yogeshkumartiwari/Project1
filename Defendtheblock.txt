@@ -1,0 +1,450 @@
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#include <iostream>
+#include <algorithm>
+#include <math.h>
+#include <bits/stdc++.h>
+#include <windows.h>
+#include <unistd.h>
+using namespace std;
+
+void display();
+void reshape(int,int);
+
+char area[15][15]  =    {{'*','0','+','0','*','0','0','#','0','*','0','0','0','*','0'},
+                        {'0','0','+','0','#','#','#','0','0','0','0','0','0','0','0'},
+                        {'0','*','+','+','+','0','#','#','#','0','0','0','*','0','0'},
+                        {'0','0','0','0','+','0','0','0','0','0','0','0','0','0','0'},
+                        {'0','0','*','0','+','*','0','0','*','0','0','0','0','0','*'},
+                        {'*','0','0','0','=','0','0','0','0','0','0','0','0','0','0'},
+                        {'0','0','0','0','+','+','0','0','0','0','0','0','*','0','0'},
+                        {'0','0','0','#','#','+','#','#','0','0','0','0','0','0','#'},
+                        {'#','#','0','0','#','+','#','0','0','0','0','0','0','0','#'},
+                        {'0','0','0','0','0','+','0','0','0','0','*','0','0','*','#'},
+                        {'0','0','0','*','0','+','+','+','0','0','0','0','0','0','#'},
+                        {'*','0','0','0','0','0','0','+','+','*','0','0','0','0','0'},
+                        {'0','0','0','0','0','0','*','0','+','0','0','*','0','0','*'},
+                        {'0','0','0','0','0','0','0','0','+','0','0','0','0','0','0'},
+                        {'#','0','0','*','0','0','0','*','+','0','0','#','#','#','0'}};
+
+map<pair<int,int>,string>mp;
+int dist = 0;
+void mpinit()
+{
+    pair<int,int>k;
+    k.first=1;
+    k.second=1;
+    mp[k]="MAJOR Manvender Singh:CONTACT N0=8789389839:TEAM A:address sd:soliders 234";
+    k.first=1;
+    k.second=5;
+    mp[k]="MAJOR S Harimohan Iyer:CONTACT N0=8789389839:TEAM B:address dds,ddf:soliders 543";
+    k.first=1;
+    k.second=10;
+    mp[k]="MAJOR KK Repswal:CONTACT N0=8789389839:TEAM C:address sd:soliders 123";
+    k.first=1;
+    k.second=14;
+    mp[k]="MAJOR vikram batra:CONTACT N0=8789389839:TEAM D:address sd:soliders 234";
+    k.first=3;
+    k.second=2;
+    mp[k]="MAJOR Manoj Mukund Naravane:CONTACT N0=8789389839:TEAM E:address sd:soliders 432";
+    k.first=3;
+    k.second=13;
+    mp[k]="MAJOR Chandi Prasad Mohanty:CONTACT N0=8789389839:TEAM F:address sd:soliders 567";
+    k.first=5;
+    k.second=3;
+    mp[k]="MAJOR Yogesh Kumar Joshi:CONTACT N0=8789389839:TEAM G:address sd:soliders 456";
+    k.first=5;
+    k.second=6;
+    mp[k]="MAJOR Manoj Pande:CONTACT N0=8789389839:TEAM H:address sd:soliders 321";
+    k.first=5;
+    k.second=9;
+    mp[k]="MAJOR Ravendra Pal Singh:CONTACT N0=8789389839:TEAM I:address sd:soliders 678";
+    k.first=5;
+    k.second=15;
+    mp[k]="MAJOR Yogendra Dimri:CONTACT N0=8789389839:TEAM J:address sd:soliders 145";
+    k.first=6;
+    k.second=1;
+    mp[k]="MAJOR Jai Singh Nain:CONTACT N0=8789389839:TEAM K:address sd:soliders 612";
+    k.first=7;
+    k.second=13;
+    mp[k]="MAJOR Amardeep Singh Bhinder:CONTACT N0=8789389839:TEAM L:address sd:soliders 348";
+    k.first=10;
+    k.second=14;
+    mp[k]="MAJOR Raj Shukla:CONTACT N0=8789389839:TEAM M:address sd:soliders 417";
+    k.first=10;
+    k.second=11;
+    mp[k]="MAJOR Ajai Singh:CONTACT N0=8789389839:TEAM N:address sd:soliders 864";
+    k.first=11;
+    k.second=4;
+    mp[k]="MAJOR Harsha Gupta:CONTACT N0=8789389839:TEAM O:address sd:soliders 156";
+    k.first=12;
+    k.second=1;
+    mp[k]="MAJOR Rajeev Sirohi:CONTACT N0=8789389839:TEAM P:address sd:soliders 467";
+    k.first=12;
+    k.second=10;
+    mp[k]="MAJOR Harpal Singh:CONTACT N0=8789389839:TEAM Q:address sd:soliders 785";
+    k.first=13;
+    k.second=7;
+    mp[k]="MAJOR Sanjeev Kumar Sharma:CONTACT N0=8789389839:TEAM R:address sd:soliders 657";
+    k.first=13;
+    k.second=12;
+    mp[k]="MAJOR Upendra Dwivedi:CONTACT N0=8789389839:TEAM S:address sd:soliders 333";
+    k.first=15;
+    k.second=4;
+    mp[k]="MAJOR Shantanu Dayal:CONTACT N0=8789389839:TEAM T:address sd:soliders 522";
+    k.first=15;
+    k.second=8;
+    mp[k]="MAJOR Pradeep Chandran Nair:CONTACT N0=8789389839:TEAM U:address sd:soliders 512";
+    k.first=13;
+    k.second=15;
+    mp[k]="MAJOR Madhuri Kanitkar:CONTACT NO=2345532234:TEAM V:address sd:soliders 432";
+
+}
+void print(char area[15][15])
+{
+    int i,j;
+
+    cout<<"----------------------------------"<<endl;
+    cout<<"|                                |"<<endl;
+    cout<<"|              area              |"<<endl;
+    cout<<"|              ----              |"<<endl;
+    for(i=0;i<15;i++)
+    {
+        cout<<"| ";
+        for(j=0;j<15;j++)
+        {
+            cout<<area[i][j]<<" ";
+        }
+        cout<<" |";
+        cout<<endl;
+    }
+    cout<<"----------------------------------";
+    cout<<endl;
+}
+
+bool isValid(int i, int j)
+{
+    if ((i < 0 || i > 14) || (j < 0 || j > 14))
+        return false;
+
+    return true;
+}
+pair<int,int>shortest(char area[15][15],int i,int j,int &dist)
+{
+    bool found=false;
+    pair<int,int>res;
+    queue<pair<int,int>>temp;
+    area[i][j]='$';
+    temp.push({i,j});
+    while(!found)
+    {
+        dist++;
+        int size=temp.size();
+        for(int i=1;i<=size;i++)
+        {
+            pair<int,int>t=temp.front();
+            temp.pop();
+            if(isValid(t.first-1,t.second))
+            {
+                if(area[t.first-1][t.second]=='*')
+                {
+                    found=true;
+                    res.first=t.first-1;
+                    res.second=t.second;
+                    return res;
+
+                }
+                else if(area[t.first-1][t.second]=='0')
+                {
+                    temp.push({t.first-1,t.second});
+                }
+            }
+            if(isValid(t.first,t.second-1))
+              {
+                if(area[t.first][t.second-1]=='*')
+                {
+                    found=true;
+                    res.first=t.first;
+                    res.second=t.second-1;
+                    return res;
+
+                }
+                else if(area[t.first][t.second-1]=='0')
+                {
+                    temp.push({t.first,t.second-1});
+                }
+            }
+            if(isValid(t.first+1,t.second))
+            {
+                if(area[t.first+1][t.second]=='*')
+                {
+                    found=true;
+                    res.first=t.first+1;
+                    res.second=t.second;
+                    return res;
+
+                }
+                else if(area[t.first+1][t.second]=='0')
+                {
+                    temp.push({t.first+1,t.second});
+                }
+            }
+            if(isValid(t.first,t.second+1))
+            {
+                if(area[t.first][t.second+1]=='*')
+                {
+                    found=true;
+                    res.first=t.first;
+                    res.second=t.second+1;
+                    return res;
+
+                }
+                else if(area[t.first][t.second+1]=='0')
+                {
+                    temp.push({t.first,t.second+1});
+                }
+            }
+        }
+    }
+    res.first=-1;
+    res.second=-1;
+    return res;
+}
+void missionOperation(){
+
+    cout<<endl<<"************************************************************************************************************************************************************************"<<endl;
+    cout<<endl<<"\t\t\t*** *      * ***   *****           *** *    * *** *      * *****     **** ***** ****  ***   ***** ****"<<endl;
+    cout<<"\t\t\t *  * *    * *   * *   *          *    *    *  *  * *    * *   *     *  * *   * *  *  *   * *     *  *"<<endl;
+    cout<<"\t\t\t *  *  *   * *   * *   *  ******  *    ******  *  *  *   * *****     **   *   * **    *   * ***** **"<<endl;
+    cout<<"\t\t\t *  *    * * *   * *   *          *    *    *  *  *    * * *   *     *  * *   * * *   *   * *     * *"<<endl;
+    cout<<"\t\t\t*** *      * ***   *****           *** *    * *** *      * *   *     **** ***** *   * ***   ***** *   *"<<endl<<endl;
+    cout<<endl<<"************************************************************************************************************************************************************************"<<endl;
+    cout<<endl<<"*: soldier location"<<endl;
+    cout<<"0: empty space"<<endl;
+    cout<<"#:mountain"<<endl<<endl;
+    string l="CDS Bipin Rawat:CONTACT NO=2345532234:address delhi";
+       int i,j,ch=1;
+       mpinit();
+      print(area);
+      // while(ch)
+       {
+           cout<<endl<<"\ndo you want to know about nearest post press 1 else 0:  ";
+           cin>>ch;
+           if(ch==1)
+           {
+               int type;
+               cout<<"enter location(x,y): ";
+               cin>>i>>j;
+               dist=0;
+               cout<<"type :-\n(1) high attack\n(2) moderate attack\n(3) low attack";
+               cout<<"\nenter type: ";
+               cin>>type;
+               if(type==1)
+               {
+                   type=800;
+               }
+               else if(type==2)
+               {
+                   type=500;
+               }
+               else
+               {
+                   type=200;
+               }
+             pair<int,int>post=shortest(area,i-1,j-1,dist);
+             area[i-1][j-1] = 'T';
+             area[post.first][post.second] = 'S';
+              string t=mp[{post.first+1,post.second+1}];
+              int rq=0;
+             rq=(int (t[t.length()-3])-48)*100+(int (t[t.length()-2])-48)*10+(int (t[t.length()-1])-48);
+             cout<<"***************************************************"<<endl;
+             cout<<"*                                                 *"<<endl;
+             cout<<"*                  MESSAGE                        *"<<endl;
+             cout<<"*                  -------                        *"<<endl;
+             cout<<"*                                                 *"<<endl;
+             cout<<"*  target location : ("<<i<<","<<j<<")"<<"                        *"<<endl;
+             cout<<"*  soldier location : ("<<post.first+1<<","<<post.second+1<<")"<<"                       *"<<endl;
+             cout<<"*  distance : "<<dist<<" unit                              *"<<endl;
+             cout<<"*  mission   : loc kargil                         *"<<endl;
+             cout<<"*  solider requirement="<<type<<"                        *"<<endl;
+             cout<<"***************************************************"<<endl;
+            int i=0;
+             for(i=0;i<t.length()-3;i++)
+             {
+                 if(t[i]!=':')
+                 {
+                     cout<<t[i];
+                 }
+                 else
+                 {
+                     cout<<endl;
+                 }
+             }
+              if(type<rq)
+                cout<<type;
+              else
+              {
+                  while(i<t.length())
+                  {
+                      cout<<t[i];
+                      i++;
+                  }
+              }
+             cout<<endl<<endl;
+
+             for(int i=0;i<l.length();i++)
+             {
+                 if(l[i]!=':')
+                 {
+                     cout<<l[i];
+                 }
+                 else
+                 {
+                     cout<<endl;
+                 }
+             }
+             cout<<endl;
+             if(type>rq)
+             {
+                 cout<<"requirement soldier: "<<type-rq;
+             }
+             else{
+                cout<<"requirement solider: 0";
+             }
+             cout<<endl;
+            print(area);
+            cout<<endl;
+
+           }
+       }
+
+}
+void init(){
+    //Color mode is RGB and we can give the color in the range 0 - 1.0
+    glClearColor(0.0,100.0,100.0,1.0);
+}
+void timer(int);
+int main(int argc,char ** argv){
+
+    glutInit(&argc,argv); //Initialize the glut library
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE); // Initialize display color mode
+
+    glutInitWindowPosition(5,5);
+    glutInitWindowSize(1080,1080);
+
+    glutCreateWindow("Learning OpenGL");
+
+    //Used for clear the windows and redraw the stuff
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    // Timer function is used to call display function periodically
+    glutTimerFunc(0,timer,0);
+    init();
+    glutMainLoop();
+}
+void display(){
+    //Used to first clear the buffer
+    //glClear function sets the default background color to black
+    glClear(GL_COLOR_BUFFER_BIT);
+    //Clear all rotations and things
+    glLoadIdentity();
+    //Used to draw the stuff again onto the screen
+    //Whatever stored in the buffer will not automatically changed to the screen before calling the glFlush();
+    //Everything work on vertex in openGL
+    glColor3f(0.0f, 0.0f, 0.0f);
+    float theta;
+    //Grid
+
+    glColor3f(101.0/255, 67.0/255, 33.0/255);
+    glBegin(GL_POLYGON);
+    glVertex2f(30,30);
+    glVertex2f(180,30);
+    glVertex2f(180,180);
+    glVertex2f(30,180);
+    glEnd();
+
+    for(int i = 14; i >=0 ;i--){
+        for(int j = 0; j <= 14;j++){
+            int x = 30 + j*10;
+            int y = 30 + (14-i)*10;
+            if(area[i][j] == '*'){
+                //Post
+                glColor3f(207.0/255, 167.0/255, 110.0/255);
+                glBegin(GL_POLYGON);
+                glVertex2f(x,y);
+                glVertex2f(x+10,y);
+                glVertex2f(x+10,y+6);
+                glVertex2f(x,y+6);
+                glEnd();
+                //Post triangle
+                glColor3f(1.0f, 0.0f, 0.0f);
+                glBegin(GL_TRIANGLES);
+                glVertex2f(x,y+6);
+                glVertex2f(x+5,y+10);
+                glVertex2f(x+10,y+6);
+                glEnd();
+            }else if(area[i][j] == '0'){
+                //Empty Space
+                glColor3f(101.0/255, 67.0/255, 33.0/255);
+                glBegin(GL_POLYGON);
+                glVertex2f(x,y);
+                glVertex2f(x+10,y);
+                glVertex2f(x+10,y+10);
+                glVertex2f(x,y+10);
+                glEnd();
+            }else if(area[i][j] == '#'){
+                //Mountain
+                glColor3f(0.0f, 1.0f, 0.0f);
+                glBegin(GL_POLYGON);
+                glVertex2f(x,y);
+                glVertex2f(x+10,y);
+                glVertex2f(x+7.5,y+10);
+                glVertex2f(x+5,y+5);
+                glVertex2f(x+2.5,y+10);
+                glEnd();
+            }else if(area[i][j] == 'T'){
+                glColor3f(1, 0, 0);
+                glBegin(GL_POLYGON);
+                glVertex2f(x,y);
+                glVertex2f(x+10,y);
+                glVertex2f(x+10,y+10);
+                glVertex2f(x,y+10);
+                glEnd();
+            }else if(area[i][j] == 'S'){
+                glColor3f(0.0f, 0.0f, 1.0f);
+                glBegin(GL_TRIANGLES);
+                glVertex2f(x,y);
+                glVertex2f(x+10,y);
+                glVertex2f(x+5,y+10);
+                glEnd();
+            }
+        }
+    }
+    glFlush();
+    glutSwapBuffers();
+}
+int k = 0;
+void timer(int){
+
+    //This function call display function again and again
+    glutPostRedisplay();
+    //timer function calls itself in 1 second
+    glutTimerFunc(1000,timer,0);
+    if(k != 0){
+        missionOperation();
+    }
+    else
+        k = 1;
+
+}
+void reshape(int w,int h){
+    //Generally we work in ModelView matrix
+    glViewport(0,0,w,h);
+    //Used to change matrix mode from ModelView to Projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluOrtho2D(0,200,0,200);
+    glMatrixMode(GL_MODELVIEW);
+}
